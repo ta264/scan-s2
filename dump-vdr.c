@@ -204,7 +204,7 @@ void vdr_dump_service_parameter_set (FILE *f, service_t *s, transponder_t *t, ch
 {
 	int i;
 
-	if ((s->video_pid || s->audio_pid[0]) && ((ca_select == -1) || (ca_select < 0) || (ca_select > 0) || ((ca_select == 0) && (s->scrambled == 0)))) {
+	if ((ca_select != 0) || ((ca_select == 0) && (s->scrambled == 0))) {
 		if ((dump_channum == 1) && (s->channel_num > 0))
 			fprintf(f, ":@%i\n", s->channel_num);
 
