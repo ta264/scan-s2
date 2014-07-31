@@ -1221,6 +1221,9 @@ static void parse_pmt (struct section_buf *sb, const unsigned char *buf, int sec
 	for (i=1; i<s->audio_num; i++)
 		tmp += sprintf(tmp, ", 0x%04X (%.4s)", s->audio_pid[i], s->audio_lang[i]);
 
+	/* If we found any CA ID descriptors then set scrambled to 1 */
+	s->scrambled = (s->ca_num > 0 ? 1 : 0);
+
 	debug("0x%04X 0x%04X: %s -- %s, pmt_pid 0x%04X, vpid 0x%04X, apid %s\n",
 		current_tp->transport_stream_id,
 		s->service_id,
@@ -1367,7 +1370,10 @@ static void parse_sdt (struct section_buf *sb, const unsigned char *buf, int sec
 			s = alloc_service(current_tp, service_id);
 
 		s->running = getBits(buf, 24, 3);
-		s->scrambled = getBits(buf, 27, 1);
+		
+		/* Only use the free_CA_mode flag if the channel isn't running.  Else look for CA ID. */
+		if (s->running != RM_RUNNING)
+		  s->scrambled = getBits(buf, 27, 1);
 
 		parse_descriptors (SDT, buf + 5, descriptors_loop_len, s);
 
