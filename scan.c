@@ -2066,6 +2066,14 @@ static int __tune_to_transponder (int frontend_fd, struct transponder *t)
 			dprintf(1,"DVB-C frequency is %d\n", if_freq);
 		}
 		break;
+
+	case SYS_ATSC:
+		if_freq = t->frequency;
+
+		if (verbosity >= 2){
+			dprintf(1,"ATSC frequency is %d\n", if_freq);
+		}
+		break;
 	}
 
 	struct dvb_frontend_event ev;
@@ -2859,6 +2867,7 @@ static void scan_tp(int frontend_fd)
 	case SYS_DVBC_ANNEX_AC:
 	case SYS_DVBC_ANNEX_B:
 	case SYS_DVBT:
+	case SYS_DVBT2:
 	case SYS_DSS:
 		scan_tp_dvb();
 		break;
