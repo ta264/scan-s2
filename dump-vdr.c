@@ -191,8 +191,9 @@ void vdr_dump_dvb_parameters (FILE *f, transponder_t *t, char *orbital_pos_overr
 			break;
 
 		case SYS_ATSC:
-			fprintf (f, "%i:", t->frequency / 1000);
-			fprintf (f, "VDR does not support ATSC at this time");
+			fprintf (f, "%i:", t->frequency / 1000000);
+			fprintf (f, "M%s", qam_name[t->modulation]);
+			fprintf (f, ":A:");
 			break;
 
 		default:
